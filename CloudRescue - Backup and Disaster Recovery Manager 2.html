@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<!-- saved from url=(0022)http://localhost:3001/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CloudRescue - Backup and Disaster Recovery Manager</title>
+  <link rel="stylesheet" href="./CloudRescue - Backup and Disaster Recovery Manager 2_files/style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <h1>CloudRescue</h1>
+      <p>Automated backup and disaster recovery manager</p>
+    </div>
+    <dl class="stats" id="stats" aria-live="polite"><div><dt>Backups</dt><dd class="">1</dd></div><div><dt>Verified</dt><dd class="">1</dd></div><div><dt>Corrupted</dt><dd class="">0</dd></div><div><dt>Failures logged</dt><dd class="">0</dd></div><div><dt>Source files</dt><dd class="">5</dd></div><div><dt>Stored</dt><dd class="">450 B</dd></div></dl>
+  </header>
+
+  <main>
+    <section class="vault" aria-labelledby="vault-title">
+      <div class="vault-head">
+        <h2 id="vault-title">Backup timeline</h2>
+        <ul class="legend">
+          <li><i class="dot unverified"></i>Not verified</li>
+          <li><i class="dot verified"></i>Verified</li>
+          <li><i class="dot corrupted"></i>Corrupted</li>
+        </ul>
+      </div>
+      <div class="track" id="timeline"><button class="seg verified" style="height:58px" type="button" title="Manual backup - 22/10/2026, 3:51:29 pm - VERIFIED" aria-label="Open backup bk-20261022-102129-f012"></button></div>
+    </section>
+
+    <nav class="tabs" role="tablist" aria-label="Sections">
+      <button role="tab" aria-selected="true" data-tab="backups">Backups</button>
+      <button role="tab" aria-selected="false" data-tab="source">Source files</button>
+      <button role="tab" aria-selected="false" data-tab="schedules">Schedules</button>
+      <button role="tab" aria-selected="false" data-tab="logs">Logs</button>
+    </nav>
+
+    <section class="panel" id="tab-backups">
+      <div class="panel-head">
+        <h2>Backup history</h2>
+        <form id="backup-form" class="inline">
+          <label class="sr" for="backup-label">Backup label</label>
+          <input id="backup-label" maxlength="80" placeholder="Label (optional)">
+          <button class="primary" type="submit">Back up now</button>
+        </form>
+      </div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Backup</th><th>Created</th><th>Trigger</th><th>Files</th><th>Size</th><th>Integrity</th><th class="actions-col">Actions</th></tr></thead>
+        <tbody id="backup-rows"><tr><td>Manual backup<span class="sub mono">bk-20261022-102129-f012</span></td><td>22/10/2026, 3:51:29 pm</td><td>manual</td><td>5</td><td>450 B</td><td><span class="badge VERIFIED">VERIFIED</span><span class="sub">checked 22/10/2026, 3:51:48 pm</span></td><td class="actions"><button type="button">Verify</button><button type="button">Details</button><button type="button">Restore</button><button type="button" class="danger">Delete</button></td></tr></tbody>
+      </table></div>
+    </section>
+
+    <section class="panel" id="tab-source" hidden="">
+      <div class="panel-head"><h2>Source files</h2><p class="hint">These files in <code>data/source</code> are what each backup protects.</p></div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Path</th><th>Size</th><th>Modified</th><th class="actions-col">Actions</th></tr></thead>
+        <tbody id="source-rows"></tbody>
+      </table></div>
+      <form id="source-form" class="stack">
+        <h3>Add or overwrite a file</h3>
+        <label>File name <input id="source-name" required="" placeholder="folder/example.txt" maxlength="120"></label>
+        <label>Content <textarea id="source-content" rows="4" placeholder="Text content"></textarea></label>
+        <button class="primary" type="submit">Save file</button>
+      </form>
+    </section>
+
+    <section class="panel" id="tab-schedules" hidden="">
+      <div class="panel-head"><h2>Scheduled backups</h2><p class="hint">Runs while the server is running. Minimum interval is 5 seconds.</p></div>
+      <form id="schedule-form" class="inline wrap">
+        <label>Label <input id="sch-label" maxlength="60" placeholder="Nightly backup"></label>
+        <label>Every (seconds) <input id="sch-interval" type="number" min="5" max="604800" value="30" required=""></label>
+        <label class="check"><input id="sch-verify" type="checkbox" checked=""> Verify after backup</label>
+        <button class="primary" type="submit">Add schedule</button>
+      </form>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Label</th><th>Interval</th><th>Next run</th><th>Last run</th><th>Status</th><th>Runs</th><th class="actions-col">Actions</th></tr></thead>
+        <tbody id="schedule-rows"></tbody>
+      </table></div>
+    </section>
+
+    <section class="panel" id="tab-logs" hidden="">
+      <div class="panel-head">
+        <h2>Logs</h2>
+        <div class="inline">
+          <select id="log-kind" aria-label="Log type">
+            <option value="failures">Failure log</option>
+            <option value="events">All events</option>
+          </select>
+          <button id="log-clear" type="button">Clear this log</button>
+        </div>
+      </div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Time</th><th>Level</th><th>Event</th><th>Message</th></tr></thead>
+        <tbody id="log-rows"></tbody>
+      </table></div>
+    </section>
+  </main>
+
+  <dialog id="dialog" open=""><div id="dialog-body"><div class="dlg-head"><div><h2>Manual backup</h2><span class="sub mono">bk-20261022-102129-f012</span><span class="sub">22/10/2026, 3:51:29 pm - manual - 5 files - 450 B</span></div><button type="button">Close</button></div><div><span class="badge VERIFIED">VERIFIED</span></div><div class="dlg-tools"><button type="button" class="primary">Verify SHA-256</button><label>Corruption type<select id="corrupt-mode" aria-label="Corruption type"><option value="flip">Flip one byte</option><option value="truncate">Truncate file</option><option value="delete">Delete file</option></select></label><label>Restore destination<select id="restore-target" aria-label="Restore destination"><option value="restored">Restore to data/restored (safe)</option><option value="source">Overwrite data/source</option></select></label><button type="button">Corrupt a random file</button><button type="button">Restore all files</button></div><div class="table-wrap"><table><thead><tr><th>File and SHA-256</th><th>Size</th><th>Last check</th><th class="actions-col">Actions</th></tr></thead><tbody><tr><td>config.json<span class="sub mono hash">1b2bba2526d8e3cb1cb9ea2b575a28ab95a79db603bb20d3a0adf3405fdae7b9</span></td><td>70 B</td><td><span class="badge OK">OK</span></td><td class="actions"><button type="button">Restore</button><button type="button" class="danger">Corrupt</button></td></tr><tr><td>nested/readme.txt<span class="sub mono hash">1816905c78ceb565292b844d769944d38d0ada1b9e2c620990bb9d393eaf9860</span></td><td>75 B</td><td><span class="badge OK">OK</span></td><td class="actions"><button type="button">Restore</button><button type="button" class="danger">Corrupt</button></td></tr><tr><td>notes.txt<span class="sub mono hash">3b4752480e643b868b08f8251b1eaa35b6b862ee735f8653351bfe919ce743f7</span></td><td>152 B</td><td><span class="badge OK">OK</span></td><td class="actions"><button type="button">Restore</button><button type="button" class="danger">Corrupt</button></td></tr><tr><td>report.md<span class="sub mono hash">596c338cb3c2534e926e85cc83f40f9da814e4f1634e5c49f80b44c5dfdc7c78</span></td><td>97 B</td><td><span class="badge OK">OK</span></td><td class="actions"><button type="button">Restore</button><button type="button" class="danger">Corrupt</button></td></tr><tr><td>students.csv<span class="sub mono hash">35cda59dbc8c8d371f3462385e50013d6ae2845316b778853f2e2eb8372f08f6</span></td><td>56 B</td><td><span class="badge OK">OK</span></td><td class="actions"><button type="button">Restore</button><button type="button" class="danger">Corrupt</button></td></tr></tbody></table></div></div></dialog>
+  <div id="toasts" aria-live="assertive"></div>
+  <script src="./CloudRescue - Backup and Disaster Recovery Manager 2_files/app.js.download"></script>
+
+
+</body></html>
